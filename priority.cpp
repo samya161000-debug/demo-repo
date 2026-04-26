@@ -1,11 +1,50 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
+int tsp_g[10][10] = {{12, 30, 33, 10, 45},
+{56, 22, 9, 15, 18},
+{29, 13, 8, 5, 12},
+{33, 28, 16, 10, 3},
+{1, 4, 30, 24, 20}
+};
+int visited[10], n, cost = 0;
 
-int main(){
-    cout<<"Enter number of processes:"<<endl;
-    int n;
-    cin>>n;
-    int priority, at[100],bt[100];
-    for(in)
+void travellingsalesman(int c){
+   int k, adj_vertex = 999;
+   int min = 999;
+   
+   visited[c] = 1;
+        3
+   cout<<c + 1<<" ";
+   
+   for(k = 0; k < n; k++) {
+      if((tsp_g[c][k] != 0) && (visited[k] == 0)) {
+         if(tsp_g[c][k] < min) {
+            min = tsp_g[c][k];
+               adj_vertex = k;
+         }
+      }
+   }
+   if(min != 999) {
+      cost = cost + min;
+   }
+   if(adj_vertex == 999) {
+      adj_vertex = 0;
+      cout<<adj_vertex + 1;
+      cost = cost + tsp_g[c][adj_vertex];
+      return;
+   }
+   travellingsalesman(adj_vertex);
 }
 
+int main(){
+   int i, j;
+   n = 5;
+   for(i = 0; i < n; i++) {
+      visited[i] = 0;
+   }
+   cout<<"Shortest Path: ";
+   travellingsalesman(0);
+   cout<<"\nMinimum Cost: ";
+   cout<<cost;
+   return 0;
+}
