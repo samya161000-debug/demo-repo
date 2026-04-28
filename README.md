@@ -42,13 +42,12 @@ This repository contains implementations of fundamental algorithms from multiple
 
 * Activity Selection
 * Dijkstra’s Algorithm
+
   #include <iostream>
 using namespace std;
-
 int main() {
-    int n = 5;
-
-    int graph[5][5] = {
+int n = 5;
+int graph[5][5] = {
         {0,10,0,30,100},
         {0,0,50,0,0},
         {0,0,0,0,10},
@@ -69,17 +68,15 @@ int main() {
 
     for(int count = 0; count < n-1; count++) {
         int min = 999, u;
-
-        for(int i = 0; i < n; i++) {
+   for(int i = 0; i < n; i++) {
             if(visited[i] == 0 && dist[i] < min) {
                 min = dist[i];
                 u = i;
             }
         }
+ visited[u] = 1;
 
-        visited[u] = 1;
-
-        for(int v = 0; v < n; v++) {
+ for(int v = 0; v < n; v++) {
             if(graph[u][v] != 0 && visited[v] == 0) {
                 if(dist[u] + graph[u][v] < dist[v]) {
                     dist[v] = dist[u] + graph[u][v];
@@ -87,18 +84,17 @@ int main() {
             }
         }
     }
-
-    cout << "Shortest distances from node 0:\n";
+ cout << "Shortest distances from node 0:\n";
     for(int i = 0; i < n; i++) {
         cout << "To " << i << " = " << dist[i] << endl;
-    }
-
-    return 0;
+}
+   return 0;
 }
 
 ## Minimum Spanning Tree
 
 * Kruskal’s Algorithm
+  
   #include <bits/stdc++.h>
 using namespace std;
 
@@ -135,6 +131,7 @@ int main() {
     return 0;
 }
 * Prim’s Algorithm
+  
   #include <bits/stdc++.h>
 using namespace std;
 
@@ -189,9 +186,228 @@ int main() {
 ## Advanced Graph Problems
 
 * Dijkstra Path Printing
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;   // nodes, edges
+
+    vector<vector<pair<int,int>>> adj(n);
+
+    // input edges: u v w
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w}); // remove if directed
+    }
+
+    int src = 0; // source node
+
+    vector<int> dist(n, INT_MAX);
+    vector<int> parent(n);
+
+    for (int i = 0; i < n; i++)
+        parent[i] = i;
+
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        int d = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+
+        for (auto it : adj[node]) {
+            int v = it.first;
+            int w = it.second;
+
+            if (dist[node] + w < dist[v]) {
+                dist[v] = dist[node] + w;
+                pq.push({dist[v], v});
+                parent[v] = node;
+            }
+        }
+    }
+
+    // Print shortest distances
+    cout << "Distances from source:\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << " -> " << dist[i] << endl;
+    }
+
+    // Function to print path
+    cout << "\nShortest paths:\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Path to " << i << " : ";
+
+        vector<int> path;
+        for (int v = i; v != parent[v]; v = parent[v])
+            path.push_back(v);
+
+        path.push_back(src);
+
+        reverse(path.begin(), path.end());
+
+        for (int v : path)
+            cout << v << " ";
+
+        cout << endl;
+    }
+
+    return 0;
+}
 * Cycle Detection
+
+  #include <iostream>
+using namespace std;
+
+int graph[5][5] = {
+    {0,1,0,0,0},
+    {0,0,1,0,0},
+    {0,0,0,1,0},
+    {0,1,0,0,0}, 
+    {0,0,0,0,0}
+};
+
+int visited[5];
+int recStack[5];
+
+bool dfs(int node) {
+    visited[node] = 1;
+    recStack[node] = 1;
+
+    for(int i = 0; i < 5; i++) {
+        if(graph[node][i]) {
+            if(!visited[i] && dfs(i))
+                return true;
+            else if(recStack[i])
+                return true;
+        }
+    }
+
+    recStack[node] = 0;
+    return false;
+}
+
+int main() {
+    for(int i = 0; i < 5; i++) {
+        visited[i] = 0;
+        recStack[i] = 0;
+    }
+
+    for(int i = 0; i < 5; i++) {
+        if(!visited[i]) {
+            if(dfs(i)) {
+                cout << "Cycle detected";
+                return 0;
+            }
+        }
+    }
+
+    cout << "No cycle";
+    return 0;
+}
 * Multistage Graph
+  #include <iostream>
+using namespace std;
+
+int main() {
+    int n = 8;
+
+    int graph[8][8] = {
+        {0,1,2,5,0,0,0,0},
+        {0,0,0,0,4,11,0,0},
+        {0,0,0,0,9,5,16,0},
+        {0,0,0,0,0,0,2,0},
+        {0,0,0,0,0,0,0,18},
+        {0,0,0,0,0,0,0,13},
+        {0,0,0,0,0,0,0,2},
+        {0,0,0,0,0,0,0,0}
+    };
+
+    int cost[8];
+    int path[8];
+
+    cost[n-1] = 0;
+
+    for(int i = n-2; i >= 0; i--) {
+        cost[i] = 999;
+
+        for(int j = i+1; j < n; j++) {
+            if(graph[i][j] != 0) {
+                if(graph[i][j] + cost[j] < cost[i]) {
+                    cost[i] = graph[i][j] + cost[j];
+                    path[i] = j;
+                }
+            }
+        }
+    }
+
+    cout << "Minimum cost: " << cost[0] << endl;
+
+    cout << "Path: ";
+    int i = 0;
+    while(i != n-1) {
+        cout << i << " -> ";
+        i = path[i];
+    }
+    cout << n-1;
+
+    return 0;
+}
 * Traveling Salesman Problem (TSP)
+  #include <bits/stdc++.h>
+using namespace std;
+
+int n;
+int dist[20][20];
+
+int dp[20][1 << 20];
+
+// mask → visited cities
+// pos → current city
+
+int tsp(int pos, int mask) {
+    if (mask == (1 << n) - 1) {
+        return dist[pos][0]; // return to start
+    }
+
+    if (dp[pos][mask] != -1)
+        return dp[pos][mask];
+
+    int ans = INT_MAX;
+
+    for (int city = 0; city < n; city++) {
+        if (!(mask & (1 << city))) {
+            ans = min(ans,
+                      dist[pos][city] +
+                      tsp(city, mask | (1 << city)));
+        }
+    }
+
+    return dp[pos][mask] = ans;
+}
+
+int main() {
+    cin >> n;
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> dist[i][j];
+
+    memset(dp, -1, sizeof(dp));
+
+    cout << "Minimum cost of TSP: "
+         << tsp(0, 1) << endl;
+
+    return 0;
+}
+
+
 
 ---
 
