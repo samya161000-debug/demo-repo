@@ -5,6 +5,7 @@ This repository contains implementations of fundamental algorithms from multiple
 # Basics & Recursion
 
 * Bubble Sort
+  
 * Selection Sort
 * Horner’s Rule
 * Linear Search
@@ -41,11 +42,149 @@ This repository contains implementations of fundamental algorithms from multiple
 
 * Activity Selection
 * Dijkstra’s Algorithm
+  #include <iostream>
+using namespace std;
+
+int main() {
+    int n = 5;
+
+    int graph[5][5] = {
+        {0,10,0,30,100},
+        {0,0,50,0,0},
+        {0,0,0,0,10},
+        {0,0,20,0,60},
+        {0,0,0,0,0}
+    };
+
+    int dist[5];
+    int visited[5];
+
+    for(int i = 0; i < n; i++) {
+        dist[i] = 999;
+        visited[i] = 0;
+    }
+
+    int start = 0;
+    dist[start] = 0;
+
+    for(int count = 0; count < n-1; count++) {
+        int min = 999, u;
+
+        for(int i = 0; i < n; i++) {
+            if(visited[i] == 0 && dist[i] < min) {
+                min = dist[i];
+                u = i;
+            }
+        }
+
+        visited[u] = 1;
+
+        for(int v = 0; v < n; v++) {
+            if(graph[u][v] != 0 && visited[v] == 0) {
+                if(dist[u] + graph[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u][v];
+                }
+            }
+        }
+    }
+
+    cout << "Shortest distances from node 0:\n";
+    for(int i = 0; i < n; i++) {
+        cout << "To " << i << " = " << dist[i] << endl;
+    }
+
+    return 0;
+}
 
 ## Minimum Spanning Tree
 
 * Kruskal’s Algorithm
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, W;
+    cin >> n >> W;
+
+    vector<int> wt(n), val(n);
+
+    for (int i = 0; i < n; i++)
+        cin >> wt[i];
+
+    for (int i = 0; i < n; i++)
+        cin >> val[i];
+
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
+
+    for (int i = 1; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+
+            if (wt[i - 1] <= w) {
+                dp[i][w] = max(
+                    val[i - 1] + dp[i - 1][w - wt[i - 1]],
+                    dp[i - 1][w]
+                );
+            } else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    cout << "Maximum value: " << dp[n][W] << endl;
+
+    return 0;
+}
 * Prim’s Algorithm
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;   // number of vertices
+
+    vector<vector<int>> cost(n, vector<int>(n));
+
+    // adjacency matrix input
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> cost[i][j];
+
+    vector<int> visited(n, 0);
+    visited[0] = 1;
+
+    int edges = 0, minCost = 0;
+
+    cout << "MST edges:\n";
+
+    while (edges < n - 1) {
+        int minEdge = INT_MAX;
+        int x = -1, y = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (visited[i]) {
+                for (int j = 0; j < n; j++) {
+                    if (!visited[j] && cost[i][j]) {
+                        if (cost[i][j] < minEdge) {
+                            minEdge = cost[i][j];
+                            x = i;
+                            y = j;
+                        }
+                    }
+                }
+            }
+        }
+
+        cout << x << " - " << y << " : " << minEdge << endl;
+
+        visited[y] = 1;
+        minCost += minEdge;
+        edges++;
+    }
+
+    cout << "Total MST cost: " << minCost << endl;
+
+    return 0;
+}
 
 ## Advanced Graph Problems
 
