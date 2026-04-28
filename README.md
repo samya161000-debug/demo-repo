@@ -66,7 +66,8 @@ int main()
     return 0;
 }
 * Selection Sort
-  #include <iostream>
+
+ #include <iostream>
 #include <cstdlib>   
 #include <ctime>     
 using namespace std;
@@ -255,33 +256,619 @@ int main(){
     cout<<"Final velocity is: "<<velocity(u,a,t)<<endl;
 }
 * Tower of Hanoi
-* Truth Table
+  #include <iostream>
+using namespace std;
+
+void towerOfHanoi(int n, char source, char auxiliary, char destination)
+{
+    if (n == 1)
+    {
+        cout << "Move disk 1 from " << source << " to " << destination << endl;
+        return;
+    }
+
+    towerOfHanoi(n - 1, source, destination, auxiliary);
+
+    cout << "Move disk " << n << " from " << source << " to " << destination << endl;
+
+    towerOfHanoi(n - 1, auxiliary, source, destination);
+}
+
+int main()
+{
+    int n;
+    cout << "Enter number of disks: ";
+    cin >> n;
+
+    towerOfHanoi(n, 'A', 'B', 'C');
+
+    return 0;
+}
+
 
 ## Searching & Simple Sorting
 
 * Binary Search
+  #include <iostream>
+#include <cstdlib>   
+#include <ctime>     
+using namespace std;
+
+int binarysearch(int arr[], int low, int high, int x) {
+    if (low > high) {
+        return -1;
+    }
+
+    int mid = (low + high) / 2;
+
+    if (arr[mid] == x)
+        return mid;
+    else if (arr[mid] < x)
+        return binarysearch(arr, mid + 1, high, x);
+    else
+        return binarysearch(arr, low, mid - 1, x);
+}
+
+int main() {
+    srand(time(0));   
+
+    int n = 10;
+    int arr[n];
+
+    arr[0] = rand() % 10;
+    for (int i = 1; i < n; i++) {
+        arr[i] = arr[i - 1] + (rand() % 5 + 1); 
+    }
+
+    cout << "Array elements:\n";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    int x;
+    cout << "Enter element to search: ";
+    cin >> x;
+
+    int result = binarysearch(arr, 0, n - 1, x);
+
+    if (result != -1)
+        cout << "Element found at index " << result << endl;
+    else
+        cout << "Element not found" << endl;
+
+    return 0;
+}
 * Insertion
+  #include <iostream>
+using namespace std;
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        arr[j + 1] = key;
+    }
+}
+
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    insertionSort(arr, n);
+
+    cout << "Sorted array: ";
+    printArray(arr, n);
+
+    return 0;
+}
 
 ### Efficient Sorting
 
 * Merge Sort
-* Quick Sort
+  #include<iostream>
+#include<vector>
+using namespace std;
+void merge(int arr[],int st,int end,int mid){
+vector<int>temp;
+int i=st,j=mid+1;
+while(i<=mid && j<=end){
+    if(arr[i]<=arr[j]){
+        temp.push_back(arr[i]);
+        i++;
+    }else{
+        temp.push_back(arr[j]);
+        j++;
+    }
+}
+while(i<=mid){
+    temp.push_back(arr[i]);
+    i++;
+}
+while(j<=end){
+    temp.push_back(arr[j]);
+    j++;
+}
+for(int i=0;i<temp.size();i++){
+    arr[st+i]=temp[i];
 
+}
+}
+void mergesort(int arr[],int st,int end){
+    int mid=st+(end-st)/2;
+    if(st<end){
+        mergesort(arr,st,mid);
+        mergesort(arr,mid+1,end);
+        merge(arr,st,end,mid);
+    }
+}
+int main(){
+    int size;
+    cout<<"Enter size:"<<endl;
+    cin>>size;
+    cout<<"enter elements"<<endl;
+    int arr[100];
+    for(int x=0;x<size;x++){
+        cin>>arr[x];
+
+        
+    }
+}
+* Quick Sort
+  
+#include<iostream>
+using namespace std;
+void swap(int &a ,int &b){
+    int temp;
+    temp=a;
+    a=b;
+    b=temp;
+}
+void print(int arr[],int st,int end){
+    for(int b=st;b<end;b++){
+        cout<<arr[b]<<endl;
+    }
+}
+int partition(int arr[], int st, int end){
+    int pividx,idx;
+    pividx=end;
+    idx=st;
+    for(int i=st;i<end;i++){
+        if(arr[i]<arr[pividx]){
+            swap(arr[idx],arr[i]);
+            idx++;
+        }
+    }
+    swap(arr[idx],arr[pividx]);
+    return idx;
+}
+void quicksort(int arr[],int st,int end){
+    if(st<end){
+       int pividx=partition(arr,st,end);
+       quicksort(arr,st,pividx-1);
+       quicksort(arr,pividx+1,end);
+    }
+   
+}
+int main(){
+    int size;
+    cout<<"Enter size:"<<endl;
+    cin>>size;
+   cout<<"Enter elements"<<endl;
+   int arr[100];
+   for(int x=0;x<size;x++){
+    cin>>arr[x];
+   }
+   quicksort(arr,0,size-1);
+   print(arr, 0, size);
+}
 ## Divide & Conquer
 
 * Kth Smallest Element
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> arr = {7, 10, 4, 3, 20, 15};
+    int k = 3;
+
+    priority_queue<int, vector<int>, greater<int>> pq;
+
+    for (int x : arr)
+        pq.push(x);
+
+    for (int i = 1; i < k; i++)
+        pq.pop();
+
+    cout << "Kth smallest: " << pq.top();
+
+    return 0;
+}
 * Min-Max
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter size of array: ";
+    cin >> n;
+
+    vector<int> arr(n);
+
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    int mn = arr[0];
+    int mx = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        if (arr[i] < mn)
+            mn = arr[i];
+
+        if (arr[i] > mx)
+            mx = arr[i];
+    }
+
+    cout << "Minimum element: " << mn << endl;
+    cout << "Maximum element: " << mx << endl;
+
+    return 0;
+}
 
 ## Advanced Algorithms
 
 * Convex Hull
-* Knapsack Problem
-* Matrix Multiplication
-* Strassen’s Matrix Multiplication
+  #include <bits/stdc++.h>
+using namespace std;
 
+struct Point {
+    int x, y;
+};
+
+// Global reference point
+Point p0;
+
+// Function to find orientation
+int orientation(Point p, Point q, Point r) {
+    int val = (q.y - p.y) * (r.x - q.x) -
+              (q.x - p.x) * (r.y - q.y);
+
+    if (val == 0) return 0;       // collinear
+    return (val > 0) ? 1 : 2;     // 1 = clockwise, 2 = counterclockwise
+}
+
+// Distance squared
+int distSq(Point p1, Point p2) {
+    return (p1.x - p2.x)*(p1.x - p2.x) +
+           (p1.y - p2.y)*(p1.y - p2.y);
+}
+
+// Comparator for sorting
+bool compare(Point p1, Point p2) {
+    int o = orientation(p0, p1, p2);
+
+    if (o == 0)
+        return distSq(p0, p1) < distSq(p0, p2);
+
+    return (o == 2);
+}
+
+vector<Point> convexHull(vector<Point>& points) {
+    int n = points.size();
+
+    // Step 1: Find bottom-most point
+    int ymin = points[0].y, min_i = 0;
+    for (int i = 1; i < n; i++) {
+        if ((points[i].y < ymin) ||
+           (points[i].y == ymin && points[i].x < points[min_i].x)) {
+            ymin = points[i].y;
+            min_i = i;
+        }
+    }
+
+    swap(points[0], points[min_i]);
+    p0 = points[0];
+
+    // Step 2: Sort by polar angle
+    sort(points.begin() + 1, points.end(), compare);
+
+    // Step 3: Build hull using stack
+    stack<Point> st;
+    st.push(points[0]);
+    st.push(points[1]);
+    st.push(points[2]);
+
+    for (int i = 3; i < n; i++) {
+        while (st.size() > 1) {
+            Point top = st.top(); st.pop();
+            Point nextToTop = st.top();
+
+            if (orientation(nextToTop, top, points[i]) != 2)
+                continue;
+            else {
+                st.push(top);
+                break;
+            }
+        }
+        st.push(points[i]);
+    }
+
+    // Store result
+    vector<Point> hull;
+    while (!st.empty()) {
+        hull.push_back(st.top());
+        st.pop();
+    }
+
+    return hull;
+}
+
+int main() {
+    vector<Point> points = {
+        {0, 3}, {2, 2}, {1, 1},
+        {2, 1}, {3, 0}, {0, 0},
+        {3, 3}
+    };
+
+    vector<Point> hull = convexHull(points);
+
+    cout << "Convex Hull points:\n";
+    for (auto p : hull) {
+        cout << "(" << p.x << ", " << p.y << ")\n";
+    }
+
+    return 0;
+}
+* Knapsack Problem
+  #include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, W;
+    cin >> n >> W;
+
+    vector<int> wt(n), val(n);
+
+    for (int i = 0; i < n; i++)
+        cin >> wt[i];
+
+    for (int i = 0; i < n; i++)
+        cin >> val[i];
+
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
+
+    for (int i = 1; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+
+            if (wt[i - 1] <= w) {
+                dp[i][w] = max(
+                    val[i - 1] + dp[i - 1][w - wt[i - 1]],
+                    dp[i - 1][w]
+                );
+            } else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    cout << "Maximum value: " << dp[n][W] << endl;
+
+    return 0;
+}
+* Matrix Multiplication
+  #include <iostream>
+#include <climits>
+using namespace std;
+
+int matrixChainOrder(int p[], int n) {
+    int m[n][n];
+
+    // cost is 0 when multiplying one matrix
+    for (int i = 1; i < n; i++)
+        m[i][i] = 0;
+
+    // L = chain length
+    for (int L = 2; L < n; L++) {
+        for (int i = 1; i < n - L + 1; i++) {
+            int j = i + L - 1;
+            m[i][j] = INT_MAX;
+
+            for (int k = i; k < j; k++) {
+                int cost = m[i][k] + m[k+1][j] 
+                         + p[i-1] * p[k] * p[j];
+
+                if (cost < m[i][j])
+                    m[i][j] = cost;
+            }
+        }
+    }
+
+    return m[1][n-1];
+}
+
+int main() {
+    int p[] = {10, 30, 5, 60};
+    int n = sizeof(p)/sizeof(p[0]);
+
+    cout << "Minimum multiplications: "
+         << matrixChainOrder(p, n);
+
+    return 0;
+}
+* Strassen’s Matrix Multiplication
+#include <bits/stdc++.h>
+using namespace std;
+
+// Add two matrices
+vector<vector<int>> add(vector<vector<int>> A, vector<vector<int>> B) {
+    int n = A.size();
+    vector<vector<int>> C(n, vector<int>(n));
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            C[i][j] = A[i][j] + B[i][j];
+
+    return C;
+}
+
+// Subtract two matrices
+vector<vector<int>> subtract(vector<vector<int>> A, vector<vector<int>> B) {
+    int n = A.size();
+    vector<vector<int>> C(n, vector<int>(n));
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            C[i][j] = A[i][j] - B[i][j];
+
+    return C;
+}
+
+// Strassen algorithm
+vector<vector<int>> strassen(vector<vector<int>> A, vector<vector<int>> B) {
+    int n = A.size();
+
+    if (n == 1) {
+        return {{A[0][0] * B[0][0]}};
+    }
+
+    int mid = n / 2;
+
+    vector<vector<int>> A11(mid, vector<int>(mid));
+    vector<vector<int>> A12(mid, vector<int>(mid));
+    vector<vector<int>> A21(mid, vector<int>(mid));
+    vector<vector<int>> A22(mid, vector<int>(mid));
+
+    vector<vector<int>> B11(mid, vector<int>(mid));
+    vector<vector<int>> B12(mid, vector<int>(mid));
+    vector<vector<int>> B21(mid, vector<int>(mid));
+    vector<vector<int>> B22(mid, vector<int>(mid));
+
+    // Split matrices
+    for (int i = 0; i < mid; i++) {
+        for (int j = 0; j < mid; j++) {
+            A11[i][j] = A[i][j];
+            A12[i][j] = A[i][j + mid];
+            A21[i][j] = A[i + mid][j];
+            A22[i][j] = A[i + mid][j + mid];
+
+            B11[i][j] = B[i][j];
+            B12[i][j] = B[i][j + mid];
+            B21[i][j] = B[i + mid][j];
+            B22[i][j] = B[i + mid][j + mid];
+        }
+    }
+
+    // 7 multiplications
+    auto M1 = strassen(add(A11, A22), add(B11, B22));
+    auto M2 = strassen(add(A21, A22), B11);
+    auto M3 = strassen(A11, subtract(B12, B22));
+    auto M4 = strassen(A22, subtract(B21, B11));
+    auto M5 = strassen(add(A11, A12), B22);
+    auto M6 = strassen(subtract(A21, A11), add(B11, B12));
+    auto M7 = strassen(subtract(A12, A22), add(B21, B22));
+
+    // Combine results
+    vector<vector<int>> C(n, vector<int>(n));
+
+    for (int i = 0; i < mid; i++) {
+        for (int j = 0; j < mid; j++) {
+            C[i][j] = M1[i][j] + M4[i][j] - M5[i][j] + M7[i][j];
+            C[i][j + mid] = M3[i][j] + M5[i][j];
+            C[i + mid][j] = M2[i][j] + M4[i][j];
+            C[i + mid][j + mid] = M1[i][j] - M2[i][j] + M3[i][j] + M6[i][j];
+        }
+    }
+
+    return C;
+}
+
+// Print matrix
+void print(vector<vector<int>> C) {
+    for (auto row : C) {
+        for (auto val : row)
+            cout << val << " ";
+        cout << endl;
+    }
+}
+
+int main() {
+    vector<vector<int>> A = {
+        {1, 2},
+        {3, 4}
+    };
+
+    vector<vector<int>> B = {
+        {5, 6},
+        {7, 8}
+    };
+
+    vector<vector<int>> C = strassen(A, B);
+
+    cout << "Result:\n";
+    print(C);
+
+    return 0;
+}
 ## Greedy & Graphs
 
 * Activity Selection
+  #include <bits/stdc++.h>
+using namespace std;
+
+struct Activity {
+    int start, finish;
+};
+
+// Comparator: sort by finish time
+bool comp(Activity a, Activity b) {
+    return a.finish < b.finish;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<Activity> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i].start >> arr[i].finish;
+    }
+
+    sort(arr.begin(), arr.end(), comp);
+
+    int count = 1;
+    int lastFinish = arr[0].finish;
+
+    cout << "Selected activities:\n";
+    cout << arr[0].start << " " << arr[0].finish << endl;
+
+    for (int i = 1; i < n; i++) {
+        if (arr[i].start >= lastFinish) {
+            cout << arr[i].start << " " << arr[i].finish << endl;
+            lastFinish = arr[i].finish;
+            count++;
+        }
+    }
+
+    cout << "Max activities: " << count << endl;
+
+    return 0;
+}
 * Dijkstra’s Algorithm
 
   #include <iostream>
