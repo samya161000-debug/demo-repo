@@ -5,14 +5,255 @@ This repository contains implementations of fundamental algorithms from multiple
 # Basics & Recursion
 
 * Bubble Sort
-  
+  #include <iostream>
+#include <cstdlib>   
+#include <ctime>     
+using namespace std;
+
+void bubbleSort(int arr[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "Enter size of array: ";
+    cin >> n;
+
+    int arr[n];
+
+    // Seed random number generator
+    srand(time(0));
+
+    // Generate random array
+    cout << "Generated array:\n";
+    for (int i = 0; i < n; i++)
+    {
+        arr[i] = rand() % 1000;  // 0–999
+        cout << arr[i] << " ";
+    }
+
+    // Start time
+    clock_t start = clock();
+
+    // Sorting
+    bubbleSort(arr, n);
+
+    // End time
+    clock_t end = clock();
+
+    double timeTaken = double(end - start) / CLOCKS_PER_SEC;
+
+    cout << "Sorted array:";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+
+    cout <<timeTaken << " seconds" << endl;
+
+    return 0;
+}
 * Selection Sort
+  #include <iostream>
+#include <cstdlib>   
+#include <ctime>     
+using namespace std;
+void selectionSort(int arr[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int minIndex = i;
+
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] < arr[minIndex])
+            {
+                minIndex = j;
+            }
+        }
+
+        if (minIndex != i)
+        {
+            int temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "Enter size of array: ";
+    cin >> n;
+
+    int arr[n];
+
+    // Seed random number generator
+    srand(time(0));
+
+    // Generate random array
+    cout << "Generated array:\n";
+    for (int i = 0; i < n; i++)
+    {
+        arr[i] = rand() % 1000;   // 0–999
+        cout << arr[i] << " ";
+    }
+
+    // Start time
+    clock_t start = clock();
+
+    // Sorting
+    selectionSort(arr, n);
+
+    // End time
+    clock_t end = clock();
+
+    double timeTaken = double(end - start) / CLOCKS_PER_SEC;
+
+    cout << "\n\nSorted array:\n";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+
+    cout << "\n\nTime taken: " << timeTaken << " seconds" << endl;
+
+    return 0;
+}
 * Horner’s Rule
+  #include <iostream>
+using namespace std;
+
+int horner(int coeffs[], int n, int x) {
+    int result = coeffs[0];
+
+    for (int i = 1; i < n; i++) {
+        result = result * x + coeffs[i];
+    }
+
+    return result;
+}
+
+int main() {
+    int n, x;
+
+    cout << "Enter number of coefficients: ";
+    cin >> n;
+
+    int coeffs[n];
+    cout << "Enter coefficients (highest degree first): ";
+    for (int i = 0; i < n; i++) {
+        cin >> coeffs[i];
+    }
+
+    cout << "Enter value of x: ";
+    cin >> x;
+
+    int result = horner(coeffs, n, x);
+    cout << "Result: " << result << endl;
+
+    return 0;
+}
 * Linear Search
+  #include <iostream>
+#include <vector>
+#include <chrono>
+#include <cstdlib>
+using namespace std;
+using namespace std::chrono;
+
+// Linear Search Function
+int linearSearch(vector<int>& arr, int key) {
+    for (int i = 0; i < arr.size(); i++) {
+        if (arr[i] == key)
+            return i;
+    }
+    return -1;
+}
+
+int main() {
+    vector<int> sizes = {1000, 5000, 10000, 20000, 50000};
+
+    for (int n : sizes) {
+        vector<int> arr(n);
+
+        // Fill array with random numbers
+        for (int i = 0; i < n; i++) {
+            arr[i] = rand();
+        }
+
+        int key = arr[n - 1]; // worst-case search
+
+        auto start = high_resolution_clock::now();
+        linearSearch(arr, key);
+        auto stop = high_resolution_clock::now();
+
+        auto duration = duration_cast<microseconds>(stop - start);
+
+        cout << n << "\t" << duration.count() << endl;
+    }
+
+    return 0;
+}
 * Missing Number
 * Permutations
+  #include <iostream>
+#include <string>
+using namespace std;
+void permute(string str, int l, int r)
+{
+    if (l == r)
+    {
+        cout << str << endl;
+        return;
+    }
+
+    for (int i = l; i <= r; i++)
+    {
+       
+       swap(str[l], str[i]);
+       permute(str, l + 1, r);
+
+       
+        swap(str[l], str[i]);
+    }
+}
+
+int main()
+{
+    string s;
+    cout << "Enter a string: ";
+    cin >> s;
+
+    permute(s, 0, s.length() - 1);
+
+    return 0;
+}
 * Xⁿ (Power using recursion)
 * Velocity (No tips problem)
+  #include<iostream>
+using namespace std;
+int velocity(int u,int a ,int t){
+    int v=u+(a*t);
+    return v;
+}
+int main(){
+    int u,a,t;
+    cout<<"Enter initial velocity, acceleration and time:"<<endl;
+    cin>>u>>a>>t;
+    cout<<"Final velocity is: "<<velocity(u,a,t)<<endl;
+}
 * Tower of Hanoi
 * Truth Table
 
