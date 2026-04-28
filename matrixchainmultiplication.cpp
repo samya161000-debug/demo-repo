@@ -1,24 +1,39 @@
-#include<iostream>
+#include <iostream>
+#include <climits>
 using namespace std;
 
-int main(){
-    int alloc[5][3]={(0,1,0),(2,0,0),(3,0,2),(2,1,1),(0,0,2)};
-    int max[5][3]={(7,5,3),(3,2,2),(9,0,2),(4,2,2),(5,3,3)};
-    int need[5][3];
-    int avail[3]={3,2,2};
-    for(int i=0;i<5;i++){
-        for(int j=0;j<3;j++){
-            need[i][j]=max[i][j]-avail[i][j];
-        }
-    }
-    int finish[3]={0,0,0};
-    int count=0;
-    for(int k=0;k<5;k++){
-        for(int i=0;i<3;i++){
-            if(finish[i]=0){
-                int ok=1;
-                break;
+int matrixChainOrder(int p[], int n) {
+    int m[n][n];
+
+    // cost is 0 when multiplying one matrix
+    for (int i = 1; i < n; i++)
+        m[i][i] = 0;
+
+    // L = chain length
+    for (int L = 2; L < n; L++) {
+        for (int i = 1; i < n - L + 1; i++) {
+            int j = i + L - 1;
+            m[i][j] = INT_MAX;
+
+            for (int k = i; k < j; k++) {
+                int cost = m[i][k] + m[k+1][j] 
+                         + p[i-1] * p[k] * p[j];
+
+                if (cost < m[i][j])
+                    m[i][j] = cost;
             }
         }
     }
+
+    return m[1][n-1];
+}
+
+int main() {
+    int p[] = {10, 30, 5, 60};
+    int n = sizeof(p)/sizeof(p[0]);
+
+    cout << "Minimum multiplications: "
+         << matrixChainOrder(p, n);
+
+    return 0;
 }
