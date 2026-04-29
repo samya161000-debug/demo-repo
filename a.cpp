@@ -1,72 +1,60 @@
 #include <iostream>
 using namespace std;
 
-string toBinary(unsigned char ch) {
-    string bin = "";
+#define N 4
 
-    for (int i = 7; i >= 0; i--) {
-        if ((ch >> i) & 1)
-            bin += '1';
-        else
-            bin += '0';
-    }
+bool isSafe(int board[N][N], int row, int col) {
+    // Check column
+    for (int i = 0; i < row; i++)
+        if (board[i][col])
+            return false;
 
-    return bin;
+    // Check left diagonal
+    for (int i=row, j=col; i>=0 && j>=0; i--, j--)
+        if (board[i][j])
+            return false;
+
+    // Check right diagonal
+    for (int i=row, j=col; i>=0 && j<N; i--, j++)
+        if (board[i][j])
+            return false;
+
+    return true;
 }
 
+bool solve(int board[N][N], int row) {
+    if (row == N)
+        return true;
 
-void sender(string msg, string &binaryData, int &parityBit) {
-    binaryData = "";
+    for (int col = 0; col < N; col++) {
+        if (isSafe(board, row, col)) {
+            board[row][col] = 1;
 
-    cout << "\nSender Address = " << msg << endl;
-    cout << "ASCII (binary) = ";
+            if (solve(board, row + 1))
+                return true;
 
-    for (int i = 0; i < msg.length(); i++) {
-        string bin = toBinary((unsigned char)msg[i]);
-
-        cout << bin << " ";
-        binaryData += bin;   
+            // Backtrack
+            board[row][col] = 0;
+        }
     }
-
-    int count = 0;
-    for (int i = 0; i < binaryData.length(); i++) {
-        if (binaryData[i] == '1') count++;
-    }
-
-    parityBit = count % 2;
-
-    cout << "\nParity Bit = " << parityBit << endl;
+    return false;
 }
 
-void receiver(string binaryData, int parityBit) {
-    int count = 0;
-
-    for (int i = 0; i < binaryData.length(); i++) {
-        if (binaryData[i] == '1') count++;
+void printBoard(int board[N][N]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++)
+            cout << (board[i][j] ? "Q " : ". ");
+        cout << endl;
     }
-
-    count += parityBit;
-
-    cout << "\nReceiver Checking\n";
-
-    if (count % 2 == 0)
-        cout << "No Error Detected \n";
-    else
-        cout << "Error Detected \n";
 }
 
 int main() {
-    string msg, binaryData;
-    int parityBit;
+    int board[N][N] = {0};
 
-    cout << "Enter Sender Address (message): ";
-    cin >> msg;
-
-    sender(msg, binaryData, parityBit);
-
-
-
-    receiver(binaryData, parityBit);
+    if (solve(board, 0))
+        printBoard(board);
+    else
+        cout << "No solution";
 
     return 0;
 }
